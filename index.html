@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="UTF-8" />
+<title>Insomniac Software</title>
+<link rel="profile" href="http://gmpg.org/xfn/11" />
+<link rel="stylesheet" type="text/css" media="all" href="/blog/wp-content/themes/twentyten-child/style.css" />
+<link rel="pingback" href="/blog/xmlrpc.php" />
+<link rel="alternate" type="application/rss+xml" title="Insomniac Software &raquo; Feed" href="/" />
+<link rel="alternate" type="application/rss+xml" title="Insomniac Software &raquo; Comments Feed" href="/" />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="/blog/xmlrpc.php" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="/blog/wp-includes/wlwmanifest.xml" /> 
+<meta name="generator" content="WordPress 4.1.36" />
+</head>
+
+<body class="home blog custom-background">
+<div id="wrapper" class="hfeed">
+	<div id="header">
+		<div id="masthead">
+			<div id="branding" role="banner">
+								<h1 id="site-title">
+					<span>
+						<a href="/" title="Insomniac Software" rel="home">Insomniac Software</a>
+					</span>
+				</h1>
+				<div id="site-description"></div>
+
+										<img src="/blog/wp-content/themes/twentyten/images/headers/path.jpg" width="940" height="198" alt="" />
+								</div><!-- #branding -->
+
+			<div id="access" role="navigation">
+			  				<div class="skip-link screen-reader-text"><a href="#content" title="Skip to content">Skip to content</a></div>
+								<div class="menu"><ul><li class="current_page_item"><a href="/">Home</a></li></ul></div>
+			</div><!-- #access -->
+		</div><!-- #masthead -->
+	</div><!-- #header -->
+
+	<div id="main">
+
+		<div id="container">
+			<div id="content" role="main">
+
+			
+
+
+
+
+			<div id="post-99" class="post-99 post type-post status-publish format-standard hentry category-tips-tricks-hacks category-vmware">
+			<h2 class="entry-title"><a href="/" rel="bookmark">How to stop the OS X VM system log being flooded with WindowServer errors</a></h2>
+
+			<div class="entry-meta">
+				<span class="meta-prep meta-prep-author">Posted on</span> <a href="/" title="3:50 pm" rel="bookmark"><span class="entry-date">November 25, 2014</span></a> <span class="meta-sep">by</span> <span class="author vcard"><a class="url fn n" href="/" title="View all posts by Jeff">Jeff</a></span>			</div><!-- .entry-meta -->
+
+				<div class="entry-content">
+				<address>Last week I started the process of converting my 2012 MacMini into a VMware ESXi host.  I have quite a few tips I hope to find time to post but for now, here is one issue I resolved today that others might find very helpful.</address>
+<address> </address>
+<p>After installing OS X into a VM on ESXi, you have probably seen the system log file flooded multiple times per second with this error message.</p>
+<p style="padding-left: 30px;"><span style="color: #ff0000; font-family: 'Lucida Console', Monaco, monospace; font-size: smaller;">WindowServer: _CGXGLDisplayContextForDisplayDevice: No matching context for device (0xdeadbeef) &#8211; disabling OpenGL</span></p>
+<p>Despite what I found on other blogs, like the great <a href="http://blog.infrageeks.com/tuning-os-x-on-esxi/" target="_blank">Infrageeks blog</a> (which was a great help in my journey), it <strong>IS</strong> possible to stop these error messages.  You simply need to create a syslog filter rule to ignore them.</p>
+<p>&nbsp;</p>
+<p>As root, edit the <span style="color: #0000ff;">/etc/asl.conf</span> file.  About 20 lines down, before the rule that saves every message, we want to add our exclusion rule so that it won&#8217;t be saved.  So just before this line&#8230;</p>
+<pre># save everything from emergency to notice</pre>
+<p>copy and insert the following 2 lines.</p>
+<pre># ignore WindowServer messages due to ESXi display device
+? [= Sender WindowServer] [= Level 4] [= Facility user] [CA= Message _CGXGLDisplayContextForDisplayDevice] ignore</pre>
+<p>Save the file and exit your editor.</p>
+<p>&nbsp;</p>
+<p>Now you will need to restart the syslog daemon so it will use the updated rule.  You could reboot the OS X system but it is a lot faster to just manually restart the process.</p>
+<pre>sudo launchctl unload /System/Library/LauchDaemons/com.apple.syslogd.plist
+sudo launchctl load /System/Library/LauchDaemons/com.apple.syslogd.plist</pre>
+<p>If you monitor the /var/log/system.log file now, you will see a bunch of Configuration Notice: ASL Module messages as the daemon reloads but more importantly, no more WindowServer messages!</p>
+<p>&nbsp;</p>
+<p>Hope this helps.</p>
+							</div><!-- .entry-content -->
+	
+			<div class="entry-utility">
+									<span class="cat-links">
+						<span class="entry-utility-prep entry-utility-prep-cat-links">Posted in</span> <a href="/" rel="category">Tips, Tricks and Hacks</a>, <a href="/" rel="category">VMware</a>					</span>
+					<span class="meta-sep">|</span>
+												<span class="comments-link"><span>Comments Off</span></span>
+							</div><!-- .entry-utility -->
+		</div><!-- #post-## -->
+
+		
+	
+
+
+			<div id="post-88" class="post-88 post type-post status-publish format-standard hentry category-uncategorized">
+			<h2 class="entry-title"><a href="/" rel="bookmark">Manage Books and PDFs in iTunes 12</a></h2>
+
+			<div class="entry-meta">
+				<span class="meta-prep meta-prep-author">Posted on</span> <a href="/" title="4:05 pm" rel="bookmark"><span class="entry-date">October 24, 2014</span></a> <span class="meta-sep">by</span> <span class="author vcard"><a class="url fn n" href="/" title="View all posts by Jeff">Jeff</a></span>			</div><!-- .entry-meta -->
+
+				<div class="entry-content">
+				<p>Last year Apple introduced the iBooks application for Mavericks.  iBooks for OSX was to bring the management and syncing of your books and PDFs to your iDevices out of iTunes.  However, even though it was labeled as version 1.0, it felt more like a 0.1 release as some basic management features were (and still are) missing.   One of the largest oversights of iBooks was the lack of ability to manage the metadata of your books.  If you purchased all of your books from the iTunes iBook store, this shouldn&#8217;t be a problem as those books come fully populated with metadata.  But most of my books were purchased from third party book stores and didn&#8217;t have the correct, if any, metadata within the file.</p>
+<p>When iBooks and iTunes 11 were released, people hated iBooks and looked for ways to remove it and to restore the book management functionality into iTunes.  There were many blog posts on how to do it, <a href="http://www.robertsetiadi.net/getting-our-books-back-itunes-mavericks/" target="_blank">Robert Setiadi&#8217;s blog</a> for example. However, if you have installed Yosemite and iTunes 12, iBooks has been reinstalled so you will need to go thru the procedure again to &#8216;fix&#8217; it.  The procedure is similar but earlier instructions don&#8217;t work because of Yosemite&#8217;s changes.</p>
+<p>Here are the steps to restore books and PDF management to iTunes 12 on Yosemite.</p>
+<p>1. Reboot your Mac.  If you have launched iTunes, it will have launched a background process to talk to iBooks.  Quitting iTunes does not stop this process.  It is best to just reboot.</p>
+<p><strong>Note</strong>:  If for some reason you have added iTunes to your Login Items so that it starts up automatically after you log into your Mac, please remove it.</p>
+<p>If you can&#8217;t (don&#8217;t want to) reboot, quit iTunes then open the Activity Monitor utility and kill the <strong>com.apple.BKAgentService</strong> process.</p>
+<p>2. Open the Terminal application and copy/paste the following command.</p>
+<p><strong>Note</strong>: This is a single line command.</p>
+<pre>sudo mv /System/Library/PrivateFrameworks/BookKit.framework/Versions/A/XPCServices/com.apple.BKAgentService.xpc/Contents/MacOS/com.apple.BKAgentService{,-disabled}</pre>
+<p>After pasting the command, press return and you will be prompted for your password, which is required because it is a system file.  This will rename the background process application so that when iTunes runs, it will fail to start the process and not be able to communicate with iBooks.</p>
+<p>3. Remove the iBooks application.  Since it will have installed various preference files, it is easier to remove iBooks by using the free <a href="http://www.freemacsoft.net/appcleaner/" target="_blank">AppCleaner</a> utility.  Simply run AppCleaner then drag the iBooks application icon into the AppCleaner window.  It will show you a list of about 6 files/folders that it will remove.  Confirm the removal and it will move the files into the Trash.  Quit AppCleaner and empty the Trash.</p>
+<p>4. Now launch iTunes and you should see the Audiobooks option has changed back to Book (which includes Audiobooks, epub books, and PDFs)</p>
+<p><a href="/blog/wp-content/uploads/2014/10/iTunes12Sources.png"><img class="aligncenter size-full wp-image-91" src="/blog/wp-content/uploads/2014/10/iTunes12Sources.png" alt="iTunes12Sources" width="183" height="321" /></a></p>
+<p>If you still see Audiobooks listed instead of Books, it means iTunes thinks iBooks is still managing your books/PDFs.  Try again by repeating the steps above.</p>
+<p>Hope this helps.</p>
+							</div><!-- .entry-content -->
+	
+			<div class="entry-utility">
+									<span class="cat-links">
+						<span class="entry-utility-prep entry-utility-prep-cat-links">Posted in</span> <a href="/" rel="category">Uncategorized</a>					</span>
+					<span class="meta-sep">|</span>
+												<span class="comments-link"><span>Comments Off</span></span>
+							</div><!-- .entry-utility -->
+		</div><!-- #post-## -->
+
+		
+	
+
+
+			<div id="post-61" class="post-61 post type-post status-publish format-standard hentry category-failures category-geek category-tips-tricks-hacks">
+			<h2 class="entry-title"><a href="/" rel="bookmark">Clean the Open With&#8230; menu</a></h2>
+
+			<div class="entry-meta">
+				<span class="meta-prep meta-prep-author">Posted on</span> <a href="/" title="5:30 pm" rel="bookmark"><span class="entry-date">February 22, 2013</span></a> <span class="meta-sep">by</span> <span class="author vcard"><a class="url fn n" href="/" title="View all posts by Jeff">Jeff</a></span>			</div><!-- .entry-meta -->
+
+				<div class="entry-content">
+				<p>There have been a few blog posts recently discussing how to clean out the duplicate/old entries in the Open With contextual menu.  However, they all give (poor) instructions on how to add an Terminal command-line alias into a .bashrc file.  The problem here is that most users are not familiar with the command shell and trying to edit a hidden or non-existent .bashrc file is very confusing.  Until Apple fixes this issue, why make it harder on yourself.  Here is a method that is more user-friendly using Automator.</p>
+<p><span style="color: #993300;">UPDATE</span>: Scroll to the bottom of the post to download the Service file and instructions on how to install it.</p>
+<p>Open the Automator application.</p>
+<p>When it starts, it will ask you what kind of workflow to create.  Choose the Service option.<a href="/blog/wp-content/uploads/2013/02/CleanOpenWIth-1.png"><img class="aligncenter size-large wp-image-68" title="Automator - Service" src="/blog/wp-content/uploads/2013/02/CleanOpenWIth-1-1024x667.png" alt="" width="640" height="416" /></a></p>
+<p>At the top, change the &#8220;Service receives&#8221; pop-up menu from &#8220;text&#8221; to &#8220;no input&#8221; and in &#8220;any application&#8221; to &#8220;Finder&#8221;.</p>
+<p><a href="/blog/wp-content/uploads/2013/02/CleanOpenWIth-4.png"><img class="aligncenter size-full wp-image-73" title="Automator Service Options" src="/blog/wp-content/uploads/2013/02/CleanOpenWIth-4.png" alt="" width="439" height="67" /></a></p>
+<p>In the Actions Library, select Utilities then drag the &#8220;Run Shell Script&#8221; to the right hand side.  (If you don&#8217;t see the Library on the left side, click the Show Library button at the top.)</p>
+<p>In the &#8220;Run Shell Script&#8221; step, delete the &#8220;cat&#8221; sample command and copy/paste the following code.  Make sure it is a single line as I&#8217;m sure the blog page will break this into multiple lines.  Even in the image below it looks like 3 lines but is actually a single line of code.</p>
+<pre>/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister -kill -r -domain local -domain system -domain user</pre>
+<p><a href="/blog/wp-content/uploads/2013/02/CleanOpenWIth-2.png"><img class="aligncenter size-large wp-image-69" title="Automator - Clean Open With script" src="/blog/wp-content/uploads/2013/02/CleanOpenWIth-2-1024x667.png" alt="" width="640" height="416" /></a>Now choose File&gt;Save and name it &#8220;Clean Open With menu&#8221;.  You can now close/quit Automator.</p>
+<p>So now whenever you need to clean up the Open With menu, simply go to the Finder menu then choose Services &gt; Clean Open With menu.  This will launch the script which will run the lsregister utility.</p>
+<p><a href="/blog/wp-content/uploads/2013/02/CleanOpenWIth-3.png"><img class="aligncenter size-full wp-image-70" title="Finder Service menu" src="/blog/wp-content/uploads/2013/02/CleanOpenWIth-3.png" alt="" width="618" height="272" /></a></p>
+<p>&nbsp;</p>
+<p>A few caveats to be aware of when using this utility.</p>
+<ol>
+<li>As some of the other blogs have mentioned, it isn&#8217;t necessary to kill the Finder.  The lsregister utility can take a few minutes to rebuild the database.  Just be patient and within a few minutes, the Open With menu will be cleaned of all the duplicates.</li>
+<li>Resetting the database also means that it no longer knows which applications you have approved to be opened automatically when opening a document.  You will be prompted with an &#8220;Are you sure?&#8221; security prompt the first time you launch an application by opening a related document.</li>
+</ol>
+<p>&nbsp;</p>
+<p><span style="color: #993300;">UPDATE</span>: Per a few requests, I&#8217;ve zipped up the Clean Open With Menu Service which you can <a href="/blog/wp-content/uploads/2013/02/CleanOpenWithMenu.zip">download here</a>.  Simply unzip the archive and double click on Clean Open With Menu workflow file.  The Finder will ask if you wish to just install the workflow or open it in Automator.  Click the Install button and you are all set.</p>
+<p><a href="/blog/wp-content/uploads/2013/02/CleanOpenWIth-5.png"><img class="aligncenter size-full wp-image-74" title="Workflow Install question" src="/blog/wp-content/uploads/2013/02/CleanOpenWIth-5.png" alt="" width="608" height="293" /></a></p>
+							</div><!-- .entry-content -->
+	
+			<div class="entry-utility">
+									<span class="cat-links">
+						<span class="entry-utility-prep entry-utility-prep-cat-links">Posted in</span> <a href="/" rel="category">Failures</a>, <a href="/" rel="category">Geek</a>, <a href="/" rel="category">Tips, Tricks and Hacks</a>					</span>
+					<span class="meta-sep">|</span>
+												<span class="comments-link"><span>Comments Off</span></span>
+							</div><!-- .entry-utility -->
+		</div><!-- #post-## -->
+
+		
+	
+
+
+			<div id="post-41" class="post-41 post type-post status-publish format-standard hentry category-tips-tricks-hacks">
+			<h2 class="entry-title"><a href="/" rel="bookmark">Apple Genius steals precious drive space</a></h2>
+
+			<div class="entry-meta">
+				<span class="meta-prep meta-prep-author">Posted on</span> <a href="/" title="10:44 pm" rel="bookmark"><span class="entry-date">December 26, 2012</span></a> <span class="meta-sep">by</span> <span class="author vcard"><a class="url fn n" href="/" title="View all posts by Jeff">Jeff</a></span>			</div><!-- .entry-meta -->
+
+				<div class="entry-content">
+				<p>The other day I reported on my issues with <a href="/">a faulty SD card reader</a>.  A couple of support forum users had success in having the logic board replaced so I made an appointment with an Apple Genius.  My assigned Genius, Taylor, was great to work with.  He was very friendly and although he had never seen this particular issue before, he completed the troubleshooting without fail.  Even though it was the morning of Christmas Eve, and I&#8217;m sure they had a long day ahead of them, he was patient with me while we discussed the problem and came up with a repair schedule that worked for me.  This post isn&#8217;t about how great they are so let me get into the problem.</p>
+<p>During the troubleshooting, Taylor plugged my laptop into their network and booted an OS X image from their NetBoot server.  He tested the SD card reader with his SD card so that he was able to reproduce the problem with a known, good environment.  This only took a few minutes and when he was finished, he shutdown the laptop.</p>
+<p>This morning I noticed that my CrashPlan backup was running which is rare as it normally finishes everything during the night.  I looked at what CrashPlan was uploading and was surprised to see it was pushing up a 16GB sleepimage file.  Normally the backup of the hibernation/sleep image file is skipped by CrashPlan per their global exclusion rules.  I discovered that it was uploading the file located on my secondary hard drive at /Volumes/HDD/.com.apple.NetBootX/sleepimage.  This is odd for a few reasons.</p>
+<p style="padding-left: 30px;">My laptop&#8217;s power manager settings, which are saved in NVRAM, is configured to save the sleepimage file on the SSD at /private/var/vm/</p>
+<p style="padding-left: 30px;">It is also configured to only create the sleep image when actually sleeping.  During the troubleshooting, the laptop was never put to sleep but only a normal boot up and down.  I guess it is possible that their boot image would override the laptop&#8217;s PM settings but they are back to my settings now.  Perhaps this is a required mode when using a network booted system.</p>
+<p style="padding-left: 30px;">My primary drive (OS, Applications, User folder), in the main drive bay, is an SSD.  It has plenty of space left.  I don&#8217;t know why their boot image decided to use the secondary HDD for the sleepimage file instead.</p>
+<p>&nbsp;</p>
+<p>There are a couple of items to note here that might make it difficult for some users.</p>
+<p style="padding-left: 30px;">Since the .com.apple.NetBootX directory starts with a period, it is hidden in the Finder, so you can&#8217;t just drag it to the trash.</p>
+<p style="padding-left: 30px;">The directory, and all files inside, are owned and only readable/writable by the root user.</p>
+<p>Due to these items, most users will never notice the directory.  Depending on how full your drive is, you might not even notice that you have lost the space.  In my case, I don&#8217;t have much free space left so an additional 16GBs would be noticed soon enough.  The size of the sleepimage file will be the same as how much RAM you have installed in your machine.  If you only have 4GB of RAM, but a 1TB hard drive, you probably won&#8217;t even notice or care about the lost space.</p>
+<p>&nbsp;</p>
+<p>If you have ever been to the Apple Genius Bar, and they network booted your computer, you might want to check for the existence of the NetBootX directory.</p>
+<ol>
+<li>Open up the Terminal application (located in /Applications/Utilities folder)</li>
+<li>Get a full directory listing of the top level of your hard drive, with the command
+<pre>ls -al /</pre>
+<p>If you have a secondary drive, check it too with</p>
+<pre>ls -al /Volumes/[2nd drive name]/</pre>
+<p>The listing output will look similar to this.</p>
+<pre>$ ls -al /
+drwxr-xr-x   33 root  wheel     1190 Dec 26 13:20 ./
+drwxr-xr-x   33 root  wheel     1190 Dec 26 13:20 ../
+d--x--x--x    8 root  wheel      272 Aug 25 13:04 .DocumentRevisions-V100/
+drwx------    5 user  staff      170 Aug 23 16:05 .Spotlight-V100/
+d-wx-wx-wt    3 user  staff      102 Dec 26 16:25 .Trashes/
+drwx------    5 root  wheel      170 Dec 24 11:24 .com.apple.NetBootX/
+drwx------   69 user  staff     2346 Dec 26 12:37 .fseventsd/
+drwxr-xr-x@   2 root  wheel       68 Jun 20  2012 .vol/
+drwxrwxr-x+ 139 root  admin     4726 Dec 25 12:57 Applications/
+drwxr-xr-x+  68 root  wheel     2312 Nov  7 22:36 Library/
+drwxr-xr-x+   4 root  wheel      136 Jul 26 01:48 System/
+drwxr-xr-x    7 root  admin      238 Aug 20 14:54 Users/
+drwxrwxrwt@   6 root  admin      204 Dec 26 15:24 Volumes/
+drwxr-xr-x@  39 root  wheel     1326 Sep 19 15:41 bin/
+dr-xr-xr-x    3 root  wheel     4709 Dec 25 10:52 dev/
+lrwxr-xr-x@   1 root  wheel       11 Aug 23 19:39 etc@ -&gt; private/etc
+-rw-r--r--@   1 root  wheel  8192160 Aug 25 01:49 mach_kernel
+drwxr-xr-x@   6 root  wheel      204 Jul 26 01:57 private/
+drwxr-xr-x@  62 root  wheel     2108 Sep 19 15:41 sbin/
+lrwxr-xr-x@   1 root  wheel       11 Aug 23 19:39 tmp@ -&gt; private/tmp
+drwxr-xr-x@  13 root  wheel      442 Oct  2 22:01 usr/
+lrwxr-xr-x@   1 root  wheel       11 Aug 23 19:39 var@ -&gt; private/var</pre>
+<p>If you are curious to see the size of the files, list the directory with</p>
+<pre>$ ls -al /.com.apple.NetBootX 
+drwxr-xr-x@  5 root  wheel          170 Dec 24 11:24 ./
+drwxr-x--x  30 user  staff         1088 Dec 26 13:10 ../
+-rw-r--r--@  1 root  staff    216169984 Dec 24 11:31 shadowfile
+-rw-r--r--@  1 root  staff  17179869184 Dec 24 11:24 sleepimage
+-rw-r--r--@  1 root  wheel     67108864 Dec 24 11:24 swapfile0</pre>
+<p>The size of the other files are only a few hundred megabytes, which is minor compared to the sleep image.</li>
+<li>If you do have the .com.apple.NetBootX directory, you can remove it with the following command.  <span style="color: #ff0000;">WARNING: Running &#8220;sudo rm&#8221; with the wrong arguments could delete all your files.  Be very careful with this command.  Make sure there is NOT a space between the / and .com&#8230;.</span>
+<pre>sudo /bin/rm -ri /.com.apple.NetBootX</pre>
+<p>If it is on your secondary drive, the command will be</p>
+<pre>sudo /bin/rm -ri /Volumes/[2nd drive name]/.com.apple.NetBootX</pre>
+</li>
+</ol>
+<p>&nbsp;</p>
+<p>You should now be clean of the Genius&#8217; files and the drive space will be available again.  If you ever take your system in again, don&#8217;t forget to check for the NetBootX directory when you get it back.</p>
+							</div><!-- .entry-content -->
+	
+			<div class="entry-utility">
+									<span class="cat-links">
+						<span class="entry-utility-prep entry-utility-prep-cat-links">Posted in</span> <a href="/" rel="category">Tips, Tricks and Hacks</a>					</span>
+					<span class="meta-sep">|</span>
+												<span class="comments-link"><span>Comments Off</span></span>
+							</div><!-- .entry-utility -->
+		</div><!-- #post-## -->
+
+		
+	
+
+
+			<div id="post-39" class="post-39 post type-post status-publish format-standard hentry category-failures category-geek">
+			<h2 class="entry-title"><a href="/" rel="bookmark">Faulty SD card reader on Late 2011 15&#8243; MacBook Pro</a></h2>
+
+			<div class="entry-meta">
+				<span class="meta-prep meta-prep-author">Posted on</span> <a href="/" title="10:42 pm" rel="bookmark"><span class="entry-date">December 24, 2012</span></a> <span class="meta-sep">by</span> <span class="author vcard"><a class="url fn n" href="/" title="View all posts by Jeff">Jeff</a></span>			</div><!-- .entry-meta -->
+
+				<div class="entry-content">
+				<p>This past weekend I received my <a href="http://www.raspberrypi.org/">Raspberry Pi</a>.  For the first test of the little guy, I&#8217;ve decided to install OpenELEC to see how well it would work as our home theater control station (I&#8217;ll try to post more on this later).  The wonderful OpenELEC guys have made it very easy to install.  You just download the image file and write it to a SD card so that is what brought me to this situation.</p>
+<p>For the first time in the last 1.5 years, I had to use the SD card reader in my [Late 2011 15&#8243;] MacBook Pro.  When attempting to mount the card, I encountered problems like no response, saw the card but didn&#8217;t mount it, mounted it but in read-only mode, and even a repetitive mount/unmount sequence complete with the OS X warning that I removed a disk improperly.</p>
+<p>Thinking it was the card, I tried another one and had the same problems.  A quick web search returned multiple posts of other users having the same problem.  There were multiple suggestions on how to get around this problem but none of them worked for me.  There is even a <a href="http://www.youtube.com/watch?v=P6gO0FxNfH4">YouTube video</a> that showed a trick with pulling the card out a slight amount.  It has worked for most people, and it worked for me to allow the card to mount.  However it would only mount as read-only.  No matter what I did, it would not mount read-write.</p>
+<p>Although some users reported having the same issue with the Early 2011 MacBook Pro, I was able to use my older laptop with success.  I wrote the OpenELEC image to the SD card and was able to start working on my Raspberry Pi.</p>
+<p>I have plans to have the laptop&#8217;s logic board replaced later this week.  I will post back with the results.</p>
+							</div><!-- .entry-content -->
+	
+			<div class="entry-utility">
+									<span class="cat-links">
+						<span class="entry-utility-prep entry-utility-prep-cat-links">Posted in</span> <a href="/" rel="category">Failures</a>, <a href="/" rel="category">Geek</a>					</span>
+					<span class="meta-sep">|</span>
+												<span class="comments-link"><span>Comments Off</span></span>
+							</div><!-- .entry-utility -->
+		</div><!-- #post-## -->
+
+		
+	
+
+
+			<div id="post-12" class="post-12 post type-post status-publish format-standard hentry category-geek category-tips-tricks-hacks">
+			<h2 class="entry-title"><a href="/" rel="bookmark">BookBook Vol. 2 Upgrade</a></h2>
+
+			<div class="entry-meta">
+				<span class="meta-prep meta-prep-author">Posted on</span> <a href="/" title="8:53 pm" rel="bookmark"><span class="entry-date">September 7, 2012</span></a> <span class="meta-sep">by</span> <span class="author vcard"><a class="url fn n" href="/" title="View all posts by Jeff">Jeff</a></span>			</div><!-- .entry-meta -->
+
+				<div class="entry-content">
+				<p>This last spring, I bought the new iPad 3.  I have a few other products by <a href="http://twelvesouth.com" target="_blank">Twelve South</a> including the PlugBug and the Leather SurfacePad so when I needed an iPad case, it was an easy decision to get the <a href="http://twelvesouth.com/products/bookbook_ipad/" target="_blank">BookBook</a>.  This is an amazing iPad case.  I&#8217;ve received so many comments on it.  People had no idea I had an iPad with me; &#8220;I though you were carrying a journal or something&#8221;.</p>
+<p>However, being that version is the same model they came out with when the original iPad was released, it had a few dated flaws.  One of the biggest annoyances is that it didn&#8217;t have a magnet in the cover to automatically turn the iPad on/off.  After a few minutes of research, trial and error, I had installed a small magnet onto the inside cover.  Now the iPad would turn on/off automatically.  It wasn&#8217;t pretty, just taped to the cover, but it worked.</p>
+<p>Next up was a way to hold the stylus.  Many people (RIP, Mr. Jobs) say that a stylus isn&#8217;t necessary.  Perhaps but sometimes it is very useful.  Personally I use my iPad often for credit card transactions and random people who are not familiar with an iPad have a hard time signing their name using a finger.  Hand them the stylus and they don&#8217;t have any problems at all.  I use the <a href="http://adonit.net/product/jot-flip/" target="_blank">Adonit Jot Flip</a> stylus which is an amazing stylus as well as a ball-point pen.  I highly recommend them.  Since the BookBook wasn&#8217;t designed to hold a stylus, I just rolled up a business card and taped it to the inside hinge space.</p>
+<p>So recently, Twelve South came out with Vol. 2 of the BookBook.   This is a redesign to address 2 major issues.</p>
+<ol>
+<li>The iPad was not held securely in place at the top (just a simple elastic band) and it could slip out if the case if held wrong.  I had this happen to me a few times but luckily I would catch it before it fell to the ground.</li>
+<li>To adjust the viewing angle, you would use the attached string wrapped around the back.  I guess some people didn&#8217;t like this as the string would often be in the way.  I didn&#8217;t have this issue as I learned to wrap it up the side and around the top.  It was a minor issue once in a while but I liked it as it allowed me to set the viewing angle to whatever I needed for the situation.  As someone that travels a lot, this was quite useful.</li>
+</ol>
+<p>So, with this new design, issue 1 was fixed by creating an enclosure all around the iPad.  Since this meant you couldn&#8217;t easily remove the iPad, you would have to angle/lift up so that you could use the back camera.  Since the enclosure could angle up, it was used to replace the string for issue 2 and now you are to rest it against the edge of the top cover.  Some <a href="http://www.amazon.com/Twelve-South-12-1209-BookBook-Volume/product-reviews/B0084JFMFW/" target="_blank">reviewers on Amazon</a> have already complained about it, and I have to agree with them.  When sitting next to me on the desk, the up angle was too steep and the lower angle (used for typing) was too low.  So although the new case holds the iPad more securely, the other issues were disappointing.  Instead of returning the new case and using the old one, I decided to just hack it again to suit my needs.  This time, taking a bit more time to do it better.</p>
+<div id="attachment_21" style="width: 159px" class="wp-caption alignleft"><a href="/blog/wp-content/uploads/2012/09/BookBook-MagnetClip.jpg"><img class=" wp-image-21 " title="BookBook-MagnetClip" src="/blog/wp-content/uploads/2012/09/BookBook-MagnetClip-249x300.jpg" alt="" width="149" height="180" /></a><p class="wp-caption-text">Testing magnet placement, Upper tag sewn, showing paper clip for lower tag</p></div>
+<p>First off was to address the cover magnet.  Yes, they didn&#8217;t include a magnet on the redesign!  That is just an amazing oversight but easy enough to fix.  I positioned the magnet in the same location but this time covered it with black electrical tape.  Since the inside cover is black, it is not as noticeable as on the brown of the first case.</p>
+<p>Next was to come up with a way to give me better viewing angles.  On the inside of the front cover, at the top and bottom are small fabric label tabs with open sides creating loops.  I realized that this was the exact position that I want the enclosure to sit.  I first tried running a black cord between the labels but when it was pulled tight, the labels crumpled and it looked bad. I tried different ways to keep the labels looking right and finally came up with the idea of metal braces.</p>
+<div id="attachment_17" style="width: 190px" class="wp-caption alignright"><a href="/blog/wp-content/uploads/2012/09/BookBook-Label.jpg"><img class=" wp-image-17" title="BookBook-Label" src="/blog/wp-content/uploads/2012/09/BookBook-Label-300x150.jpg" alt="" width="180" height="90" /></a><p class="wp-caption-text">Label tag sewn with metal brace</p></div>
+<p>This ended up being paperclips bent in a U-shape, 1.5&#8243; wide with .5&#8243; legs.  I slid these into the labels and ran a simple stitching along the front and upper sides to keep them in place.</p>
+<div id="attachment_20" style="width: 168px" class="wp-caption alignleft"><a href="/blog/wp-content/uploads/2012/09/BookBook-Strapped.jpg"><img class=" wp-image-20 " title="BookBook-Strapped" src="/blog/wp-content/uploads/2012/09/BookBook-Strapped-263x300.jpg" alt="" width="158" height="150" /></a><p class="wp-caption-text">Completed with straps and magnet covered</p></div>
+<p>For the cross straps, I used an old elastic bra strap pulled tight and sewn shut.  To position the iPad at these levels, I would simply flip out the back (keyboard) riser and slide it behind one of the straps.  This also has the benefit of a light/privacy shield created by the top cover.  Perfection!</p>
+<p>&nbsp;</p>
+<div id="attachment_18" style="width: 172px" class="wp-caption alignright"><a href="/blog/wp-content/uploads/2012/09/BookBook-Lower.jpg"><img class=" wp-image-18 " title="BookBook-Lower" src="/blog/wp-content/uploads/2012/09/BookBook-Lower-270x300.jpg" alt="" width="162" height="180" /></a><p class="wp-caption-text">Lower strap position</p></div>
+<p>This new case is a bit smaller all around so the space along the inside spine for the stylus wasn&#8217;t an option this time.  The only place I could make it fit was along the top backside of the internal enclosure.  I&#8217;ve only had time to use the same holder as before but held on with the black electrical tape.  Soon I hope to find a better way to hold it in place but for now, it is working.</p>
+<div id="attachment_19" style="width: 190px" class="wp-caption alignleft"><a href="/blog/wp-content/uploads/2012/09/BookBook-Upper.jpg"><img class=" wp-image-19 " title="BookBook-Upper" src="/blog/wp-content/uploads/2012/09/BookBook-Upper-300x292.jpg" alt="" width="180" height="175" /></a><p class="wp-caption-text">Upper strap position</p></div>
+<p>Perhaps these ideas will help someone else that has encountered the same issues.  Hopefully Twelve South will come across this post and incorporate these modifications into Vol. 3.  If so, just give me thanks in the credits.</p>
+<p>&nbsp;</p>
+							</div><!-- .entry-content -->
+	
+			<div class="entry-utility">
+									<span class="cat-links">
+						<span class="entry-utility-prep entry-utility-prep-cat-links">Posted in</span> <a href="/" rel="category">Geek</a>, <a href="/" rel="category">Tips, Tricks and Hacks</a>					</span>
+					<span class="meta-sep">|</span>
+												<span class="comments-link"><span>Comments Off</span></span>
+							</div><!-- .entry-utility -->
+		</div><!-- #post-## -->
+
+		
+	
+
+			</div><!-- #content -->
+		</div><!-- #container -->
+
+
+		<div id="primary" class="widget-area" role="complementary">
+			<ul class="xoxo">
+
+<li id="text-2" class="widget-container widget_text"><h3 class="widget-title">Eclectic Ramblings</h3>			<div class="textwidget">This blog is just my random thoughts, ideas, and discoveries.  Some might be interesting to others but mostly it is just a place to hold some info as my brain is getting full and can't hold much more.</div>
+		</li><li id="search-2" class="widget-container widget_search"><form role="search" method="get" id="searchform" class="searchform" action="http://www.insomniacsoftware.com/">
+				<div>
+					<label class="screen-reader-text" for="s">Search for:</label>
+					<input type="text" value="" name="s" id="s" />
+					<input type="submit" id="searchsubmit" value="Search" />
+				</div>
+			</form></li>			</ul>
+		</div><!-- #primary .widget-area -->
+
+
+		<div id="secondary" class="widget-area" role="complementary">
+			<ul class="xoxo">
+						<li id="recent-posts-2" class="widget-container widget_recent_entries">		<h3 class="widget-title">Recent Posts</h3>		<ul>
+					<li>
+				<a href="/">How to stop the OS X VM system log being flooded with WindowServer errors</a>
+						</li>
+					<li>
+				<a href="/">Manage Books and PDFs in iTunes 12</a>
+						</li>
+					<li>
+				<a href="/">Clean the Open With&#8230; menu</a>
+						</li>
+					<li>
+				<a href="/">Apple Genius steals precious drive space</a>
+						</li>
+					<li>
+				<a href="/">Faulty SD card reader on Late 2011 15&#8243; MacBook Pro</a>
+						</li>
+				</ul>
+		</li><li id="categories-2" class="widget-container widget_categories"><h3 class="widget-title">Categories</h3>		<ul>
+	<li class="cat-item cat-item-10"><a href="/" >Failures</a>
+</li>
+	<li class="cat-item cat-item-3"><a href="/" >Geek</a>
+</li>
+	<li class="cat-item cat-item-4"><a href="/" >Tips, Tricks and Hacks</a>
+</li>
+	<li class="cat-item cat-item-1"><a href="/" >Uncategorized</a>
+</li>
+	<li class="cat-item cat-item-11"><a href="/" >VMware</a>
+</li>
+		</ul>
+</li><li id="archives-2" class="widget-container widget_archive"><h3 class="widget-title">Archives</h3>		<ul>
+	<li><a href='/'>November 2014</a></li>
+	<li><a href='/'>October 2014</a></li>
+	<li><a href='/'>February 2013</a></li>
+	<li><a href='/'>December 2012</a></li>
+	<li><a href='/'>September 2012</a></li>
+		</ul>
+</li><li id="meta-2" class="widget-container widget_meta"><h3 class="widget-title">Meta</h3>			<ul>
+						<li><a href="/blog/wp-login.php">Log in</a></li>
+			<li><a href="/">Entries <abbr title="Really Simple Syndication">RSS</abbr></a></li>
+			<li><a href="/">Comments <abbr title="Really Simple Syndication">RSS</abbr></a></li>
+<li><a href="https://wordpress.org/" title="Powered by WordPress, state-of-the-art semantic personal publishing platform.">WordPress.org</a></li>			</ul>
+</li>			</ul>
+		</div><!-- #secondary .widget-area -->
+
+	</div><!-- #main -->
+
+	<div id="footer" role="contentinfo">
+		<div id="colophon">
+
+
+
+			<div id="site-info">
+Copyright 
+				<a href="/" title="Insomniac Software" rel="home">
+					Insomniac Software				</a>
+			</div><!-- #site-info -->
+
+		</div><!-- #colophon -->
+	</div><!-- #footer -->
+
+</div><!-- #wrapper -->
+
+</body>
+</html>
