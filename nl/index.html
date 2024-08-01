@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="nl" class="translated-ltr"><head>
+  <meta charset="UTF-8">
+  <title>Insomniac Software</title>
+  <link rel="icon" type="image/x-icon" href="/_favicon.ico">
+  <link rel="stylesheet" type="text/css" media="all" href="/blog/wp-content/themes/twentyten-child/style.css">
+  <link rel="alternate" hreflang="en" href="https://insomniacsoftware.com/">
+  <link rel="alternate" hreflang="nl" href="https://insomniacsoftware.com/nl">
+  <link type="text/css" rel="stylesheet" charset="UTF-8" href="https://www.gstatic.com/_/translate_http/_/ss/k=translate_http.tr.26tY-h6gH9w.L.W.O/am=Phg/d=0/rs=AN8SPfor9mOnrVSOJ5Dp4JexmA5DU8Siog/m=el_main_css"></head>
+
+<body class="home blog custom-background">
+<div id="wrapper" class="hfeed">
+  <div id="header">
+    <div id="masthead">
+      <div id="branding" role="banner">
+        <h1 id="site-title">
+					<span>
+						<a href="/" title="Insomniac Software" rel="home">Insomniac Software</a>
+					</span>
+        </h1>
+        <div id="site-description"></div>
+
+        <img src="/blog/wp-content/themes/twentyten/images/headers/path.jpg" width="940" height="198" alt="">
+      </div><!-- #branding -->
+
+      <div id="access" role="navigation">
+        <div class="skip-link screen-reader-text"><a href="#content" title="Doorgaan naar artikel">Doorgaan naar artikel</a></div>
+        <div class="menu"><ul><li class="current_page_item"><a href="/">Thuis</a></li></ul></div>
+      </div><!-- #access -->
+    </div><!-- #masthead -->
+  </div><!-- #header -->
+
+  <div id="main">
+
+    <div id="container">
+      <div id="content" role="main">
+        <div id="post-99" class="post-99 post type-post status-publish format-standard hentry category-tips-tricks-hacks category-vmware">
+          <h2 class="entry-title"><a href="/" rel="bookmark">Hoe stop ik het systeemlog van de OS X VM van overstromen met WindowServer-fouten</a></h2>
+
+          <div class="entry-meta">
+            <span class="meta-prep meta-prep-author">Geplaatst op </span> <a href="/" title="15:50 uur" rel="bookmark"><span class="entry-date">25 november 2014</span></a> <span class="meta-sep"> door </span> <span class="author vcard"><a class="url fn n" href="/" title="Bekijk alle berichten van Jeff">Jeff</a></span>			</div><!-- .entry-meta -->
+
+          <div class="entry-content">
+            <address>Vorige week ben ik begonnen met het omzetten van mijn 2012 MacMini naar een VMware ESXi host. Ik heb een aantal tips die ik hoop te kunnen posten, maar voor nu is hier een probleem dat ik vandaag heb opgelost en dat anderen misschien erg nuttig vinden.</address>
+            <address>&nbsp;</address>
+            <p>Nadat u OS X op een virtuele machine op ESXi hebt geïnstalleerd, is het systeemlogboek waarschijnlijk meerdere keren per seconde overspoeld met deze foutmelding.</p>
+            <p style="padding-left: 30px;"><span style="color: #ff0000; font-family: 'Lucida Console', Monaco, monospace; font-size: smaller;">WindowServer: _CGXGLDisplayContextForDisplayDevice: Geen overeenkomende context voor apparaat (0xdeadbeef) – OpenGL uitschakelen</span></p>
+            <p>Ondanks wat ik op andere blogs vond, zoals de geweldige <a href="http://blog.infrageeks.com/tuning-os-x-on-esxi/" target="_blank">Infrageeks blog</a> (die een grote hulp was op mijn reis), <strong>is</strong> het WEL mogelijk om deze foutmeldingen te stoppen. Je hoeft alleen maar een syslog filter regel te maken om ze te negeren.</p>
+            <p>&nbsp;</p>
+            <p>Bewerk als root het bestand <span style="color: #0000ff;">/etc/asl.conf</span> . Ongeveer 20 regels verderop, voor de regel die elk bericht opslaat, willen we onze uitsluitingsregel toevoegen zodat het niet wordt opgeslagen. Dus net voor deze regel…</p>
+            <pre># bewaar alles van noodgevallen tot waarschuwingen</pre>
+            <p>Kopieer en voeg de volgende 2 regels in.</p>
+            <pre># Negeer WindowServer-berichten vanwege het ESXi-weergaveapparaat<font>
+? [= Sender WindowServer] [= Niveau 4] [= Faciliteitsgebruiker] [CA= Bericht _CGXGLDisplayContextForDisplayDevice] negeren</pre>
+            <p>Sla het bestand op en sluit de editor.</p>
+            <p>&nbsp;</p>
+            <p>Nu moet u de syslog-daemon opnieuw opstarten, zodat deze de bijgewerkte regel gebruikt. U kunt het OS X-systeem opnieuw opstarten, maar het is veel sneller om het proces handmatig opnieuw op te starten.</p>
+            <pre>sudo launchctl unload /Systeem/Bibliotheek/LauchDaemons/com.apple.syslogd.plist<font>
+sudo launchctl load /Systeem/Bibliotheek/LauchDaemons/com.apple.syslogd.plist</pre>
+            <p>Als u nu het bestand /var/log/system.log in de gaten houdt, ziet u een aantal Configuration Notice: ASL Module-berichten wanneer de daemon opnieuw wordt geladen, maar nog belangrijker: geen WindowServer-berichten meer!</p>
+            <p>&nbsp;</p>
+            <p>Ik hoop dat dit helpt.</p>
+          </div><!-- .entry-content -->
+
+          <div class="entry-utility">
+									<span class="cat-links">
+						<span class="entry-utility-prep entry-utility-prep-cat-links">Geplaatst in </span> <a href="/" rel="category">Tips, trucs en hacks</a> , <a href="/" rel="category">VMware</a>					</span>
+            <span class="meta-sep"> | </span>
+            <span class="comments-link"><span>Reacties uitgeschakeld</span></span>
+          </div><!-- .entry-utility -->
+        </div><!-- #post-## -->
+
+
+
+
+
+        <div id="post-88" class="post-88 post type-post status-publish format-standard hentry category-uncategorized">
+          <h2 class="entry-title"><a href="/" rel="bookmark">Boeken en PDF's beheren in iTunes 12</a></h2>
+
+          <div class="entry-meta">
+            <span class="meta-prep meta-prep-author">Geplaatst op </span> <a href="/" title="16:05 uur" rel="bookmark"><span class="entry-date">24 oktober 2014</span></a> <span class="meta-sep"> door </span> <span class="author vcard"><a class="url fn n" href="/" title="Bekijk alle berichten van Jeff">Jeff</a></span>			</div><!-- .entry-meta -->
+
+          <div class="entry-content">
+            <p>Vorig jaar introduceerde Apple de iBooks-applicatie voor Mavericks. iBooks voor OSX zou het beheer en de synchronisatie van uw boeken en PDF's naar uw iDevices vanuit iTunes brengen. Hoewel het werd gelabeld als versie 1.0, voelde het meer als een 0.1-release, omdat sommige basisbeheerfuncties ontbraken (en nog steeds ontbreken). Een van de grootste tekortkomingen van iBooks was het gebrek aan de mogelijkheid om de metadata van uw boeken te beheren. Als u al uw boeken hebt gekocht in de iTunes iBook-winkel, zou dit geen probleem moeten zijn, omdat die boeken volledig zijn gevuld met metadata. Maar de meeste van mijn boeken waren gekocht bij externe boekwinkels en hadden niet de juiste, indien aanwezig, metadata in het bestand.</p>
+            <p>Toen iBooks en iTunes 11 uitkwamen, haatten mensen iBooks en zochten ze naar manieren om het te verwijderen en de functionaliteit voor boekbeheer in iTunes te herstellen. Er waren veel blogposts over hoe je dat moest doen,&nbsp; bijvoorbeeld <a href="http://www.robertsetiadi.net/getting-our-books-back-itunes-mavericks/" target="_blank">de blog van Robert Setiadi</a> . Als je echter Yosemite en iTunes 12 hebt geïnstalleerd, is iBooks opnieuw geïnstalleerd, dus je moet de procedure opnieuw doorlopen om het te 'repareren'. De procedure is vergelijkbaar, maar eerdere instructies werken niet vanwege de wijzigingen in Yosemite.</p>
+            <p>Hier volgen de stappen om boeken en PDF-beheer te herstellen naar iTunes 12 op Yosemite.</p>
+            <p>1. Start je Mac opnieuw op. Als je iTunes hebt gestart, zal het een achtergrondproces hebben gestart om met iBooks te praten. iTunes afsluiten stopt dit proces niet. Het is het beste om gewoon opnieuw op te starten.</p>
+            <p><strong>Let op</strong> : Als u om welke reden dan ook iTunes aan uw inlogonderdelen hebt toegevoegd, zodat iTunes automatisch wordt gestart nadat u zich op uw Mac hebt aangemeld, verwijder dit dan.</p>
+            <p>Als u niet opnieuw kunt (wilt) opstarten, sluit u iTunes af, opent u het hulpprogramma Activiteitenweergave en beëindigt u het&nbsp; proces <strong>com.apple.BKAgentService .</strong></p>
+            <p>2. Open de Terminal-applicatie en kopieer/plak de volgende opdracht.</p>
+            <p><strong>Let op</strong> : dit is een opdracht van één regel.</p>
+            <pre>sudo mv /System/Library/PrivateFrameworks/BookKit.framework/Versions/A/XPCServices/com.apple.BKAgentService.xpc/Contents/MacOS/com.apple.BKAgentService{,-disabled}</pre>
+            <p>Nadat u de opdracht hebt geplakt, drukt u op return en wordt u gevraagd om uw wachtwoord, wat vereist is omdat het een systeembestand is. Dit zal de achtergrondprocestoepassing hernoemen, zodat wanneer iTunes draait, het proces niet kan worden gestart en niet kan communiceren met iBooks.</p>
+            <p>3. Verwijder de iBooks-applicatie. Omdat het verschillende voorkeursbestanden heeft geïnstalleerd, is het makkelijker om iBooks te verwijderen met behulp van het gratis hulpprogramma <a href="http://www.freemacsoft.net/appcleaner/" target="_blank">AppCleaner</a> . Voer AppCleaner uit en sleep het pictogram van de iBooks-applicatie naar het AppCleaner-venster. Het toont u een lijst met ongeveer 6 bestanden/mappen die het zal verwijderen. Bevestig de verwijdering en het zal de bestanden naar de Prullenbak verplaatsen. Sluit AppCleaner af en leeg de Prullenbak.</p>
+            <p>4. Start nu iTunes en je zou moeten zien dat de optie Audioboeken is veranderd naar Boek (waaronder Audioboeken, epub-boeken en PDF's)</p>
+            <p><a href="/blog/wp-content/uploads/2014/10/iTunes12Sources.png"><img class="aligncenter size-full wp-image-91" src="/blog/wp-content/uploads/2014/10/iTunes12Sources.png" alt="iTunes12Bronnen" width="183" height="321"></a></p>
+            <p>Als u nog steeds Audioboeken ziet in plaats van Boeken, betekent dit dat iTunes denkt dat iBooks nog steeds uw boeken/PDF's beheert. Probeer het opnieuw door de bovenstaande stappen te herhalen.</p>
+            <p>Ik hoop dat dit helpt.</p>
+          </div><!-- .entry-content -->
+
+          <div class="entry-utility">
+									<span class="cat-links">
+						<span class="entry-utility-prep entry-utility-prep-cat-links">Geplaatst in </span> <a href="/" rel="category">Uncategorized</a>					</span>
+            <span class="meta-sep"> | </span>
+            <span class="comments-link"><span>Reacties uitgeschakeld</span></span>
+          </div><!-- .entry-utility -->
+        </div><!-- #post-## -->
+        <div id="post-61" class="post-61 post type-post status-publish format-standard hentry category-failures category-geek category-tips-tricks-hacks">
+          <h2 class="entry-title"><a href="/" rel="bookmark">Maak het menu Open met… schoon</a></h2>
+
+          <div class="entry-meta">
+            <span class="meta-prep meta-prep-author">Geplaatst op </span> <a href="/" title="17:30 uur" rel="bookmark"><span class="entry-date">22 februari 2013</span></a> <span class="meta-sep"> door </span> <span class="author vcard"><a class="url fn n" href="/" title="Bekijk alle berichten van Jeff">Jeff</a></span>			</div><!-- .entry-meta -->
+
+          <div class="entry-content">
+            <p>Er zijn onlangs een paar blogposts verschenen waarin werd besproken hoe je de dubbele/oude items in het Open With-contextmenu kunt opschonen. Ze geven echter allemaal (slechte) instructies over hoe je een Terminal-opdrachtregelalias aan een .bashrc-bestand kunt toevoegen. Het probleem hier is dat de meeste gebruikers niet bekend zijn met de opdrachtshell en het bewerken van een verborgen of niet-bestaand .bashrc-bestand erg verwarrend is. Waarom zou je het jezelf moeilijker maken totdat Apple dit probleem oplost? Hier is een methode die gebruiksvriendelijker is met behulp van Automator.</p>
+            <p><span style="color: #993300;">UPDATE</span> : Scroll naar het einde van het bericht om het servicebestand te downloaden en instructies te krijgen over hoe u het kunt installeren.</p>
+            <p>Open de Automator-applicatie.</p>
+            <p>Wanneer het start, zal het u vragen wat voor soort workflow u wilt maken. Kies de optie Service.<a href="/blog/wp-content/uploads/2013/02/CleanOpenWIth-1.png"><img class="aligncenter size-large wp-image-68" title="Automatiseerder - Service" src="/blog/wp-content/uploads/2013/02/CleanOpenWIth-1-1024x667.png" alt="" width="640" height="416"></a></p>
+            <p>Wijzig bovenaan het pop-upmenu ‘Service ontvangt’ van ‘tekst’ naar ‘geen invoer’ en in ‘elke toepassing’ naar ‘Finder’.</p>
+            <p><a href="/blog/wp-content/uploads/2013/02/CleanOpenWIth-4.png"><img class="aligncenter size-full wp-image-73" title="Automator-serviceopties" src="/blog/wp-content/uploads/2013/02/CleanOpenWIth-4.png" alt="" width="439" height="67"></a></p>
+            <p>Selecteer Hulpprogramma's in de Actiebibliotheek en sleep vervolgens 'Shell-script uitvoeren' naar de rechterkant. (Als u de bibliotheek niet aan de linkerkant ziet, klikt u op de knop Bibliotheek weergeven bovenaan.)</p>
+            <p>Verwijder in de stap “Run Shell Script” de voorbeeldopdracht “cat” en kopieer/plak de volgende code. Zorg ervoor dat het één regel is, want ik weet zeker dat de blogpagina dit in meerdere regels zal opsplitsen. Zelfs in de afbeelding hieronder lijkt het op 3 regels, maar het is eigenlijk één regel code.</p>
+            <pre>/Systeem/Bibliotheek/Frameworks/CoreServices.framework/Versies/A/Frameworks/LaunchServices.framework/Versies/A/Ondersteuning/lsregister -kill -r -domein lokaal -domein systeem -domein gebruiker</pre>
+            <p><a href="/blog/wp-content/uploads/2013/02/CleanOpenWIth-2.png"><img class="aligncenter size-large wp-image-69" title="Automator - Schoon Openen Met script" src="/blog/wp-content/uploads/2013/02/CleanOpenWIth-2-1024x667.png" alt="" width="640" height="416"></a>Kies nu Bestand&gt;Opslaan en noem het “Opschonen Openen Met menu”. U kunt Automator nu sluiten/afsluiten.</p>
+            <p>Dus wanneer u nu het Open With-menu wilt opschonen, gaat u gewoon naar het Finder-menu en kiest u Services &gt; Clean Open With-menu. Dit start het script dat het lsregister-hulpprogramma uitvoert.</p>
+            <p><a href="/blog/wp-content/uploads/2013/02/CleanOpenWIth-3.png"><img class="aligncenter size-full wp-image-70" title="Finder-servicemenu" src="/blog/wp-content/uploads/2013/02/CleanOpenWIth-3.png" alt="" width="618" height="272"></a></p>
+            <p>&nbsp;</p>
+            <p>Er zijn een paar aandachtspunten waar u rekening mee moet houden bij het gebruik van dit hulpprogramma.</p>
+            <ol>
+              <li>Zoals sommige andere blogs al hebben vermeld, is het niet nodig om de Finder te sluiten. Het hulpprogramma lsregister kan een paar minuten nodig hebben om de database opnieuw op te bouwen. Wees gewoon geduldig en binnen een paar minuten is het menu Open With ontdaan van alle duplicaten.</li>
+              <li>Het resetten van de database betekent ook dat deze niet meer weet welke applicaties u hebt goedgekeurd om automatisch te worden geopend bij het openen van een document. U krijgt de eerste keer dat u een applicatie start door een gerelateerd document te openen een beveiligingsprompt met de vraag "Weet u het zeker?".</li>
+            </ol>
+            <p>&nbsp;</p>
+            <p><span style="color: #993300;">UPDATE</span> : Op verzoek heb ik de Clean Open With Menu Service gezipt, die u <a href="/blog/wp-content/uploads/2013/02/CleanOpenWithMenu.zip">hier kunt downloaden</a> . Pak het archief uit en dubbelklik op het Clean Open With Menu-workflowbestand. De Finder vraagt ​​of u de workflow wilt installeren of wilt openen in Automator. Klik op de knop Installeren en u bent klaar.</p>
+            <p><a href="/blog/wp-content/uploads/2013/02/CleanOpenWIth-5.png"><img class="aligncenter size-full wp-image-74" title="Workflow installatie vraag" src="/blog/wp-content/uploads/2013/02/CleanOpenWIth-5.png" alt="" width="608" height="293"></a></p>
+          </div><!-- .entry-content -->
+
+          <div class="entry-utility">
+									<span class="cat-links">
+						<span class="entry-utility-prep entry-utility-prep-cat-links">Geplaatst in </span> <a href="/" rel="category">Mislukkingen</a> , <a href="/" rel="category">Geek</a> , <a href="/" rel="category">Tips, trucs en hacks</a>					</span>
+            <span class="meta-sep"> | </span>
+            <span class="comments-link"><span>Reacties uitgeschakeld</span></span>
+          </div><!-- .entry-utility -->
+        </div><!-- #post-## -->
+
+
+
+
+
+        <div id="post-41" class="post-41 post type-post status-publish format-standard hentry category-tips-tricks-hacks">
+          <h2 class="entry-title"><a href="/" rel="bookmark">Apple Genius steelt kostbare schijfruimte</a></h2>
+
+          <div class="entry-meta">
+            <span class="meta-prep meta-prep-author">Geplaatst op </span> <a href="/" title="22:44 uur" rel="bookmark"><span class="entry-date">26 december 2012</span></a> <span class="meta-sep"> door </span> <span class="author vcard"><a class="url fn n" href="/" title="Bekijk alle berichten van Jeff">Jeff</a></span>			</div><!-- .entry-meta -->
+
+          <div class="entry-content">
+            <p>Laatst meldde ik mijn problemen met <a href="/">een defecte SD-kaartlezer</a> . Een paar gebruikers van het supportforum hadden succes met het vervangen van het moederbord, dus ik maakte een afspraak met een Apple Genius. Mijn toegewezen Genius, Taylor, was geweldig om mee te werken. Hij was erg vriendelijk en hoewel hij dit specifieke probleem nog nooit eerder had gezien, voltooide hij de probleemoplossing zonder mankeren. Hoewel het de ochtend van kerstavond was en ik er zeker van ben dat ze een lange dag voor de boeg hadden, was hij geduldig met me terwijl we het probleem bespraken en kwam hij met een reparatieschema dat voor mij werkte. Dit bericht gaat niet over hoe geweldig ze zijn, dus laat me ingaan op het probleem.</p>
+            <p>Tijdens het oplossen van problemen, verbond Taylor mijn laptop met hun netwerk en startte een OS X-image op vanaf hun NetBoot-server. Hij testte de SD-kaartlezer met zijn SD-kaart, zodat hij het probleem kon reproduceren met een bekende, goede omgeving. Dit duurde slechts een paar minuten en toen hij klaar was, zette hij de laptop uit.</p>
+            <p>Vanmorgen zag ik dat mijn CrashPlan-back-up draaide, wat zeldzaam is omdat het normaal gesproken alles 's nachts afmaakt. Ik keek naar wat CrashPlan uploadde en was verrast om te zien dat het een sleepimage-bestand van 16 GB omhoog duwde. Normaal gesproken wordt de back-up van het hibernation/sleep image-bestand overgeslagen door CrashPlan volgens hun global exclusion-regels. Ik ontdekte dat het het bestand uploadde dat zich op mijn secundaire harde schijf op /Volumes/HDD/.com.apple.NetBootX/sleepimage bevond. Dit is om een ​​paar redenen vreemd.</p>
+            <p style="padding-left: 30px;">De energiebeheerinstellingen van mijn laptop, die zijn opgeslagen in NVRAM, zijn geconfigureerd om het sleepimage-bestand op te slaan op de SSD op /private/var/vm/</p>
+            <p style="padding-left: 30px;">Het is ook geconfigureerd om alleen de slaapimage te maken als het daadwerkelijk slaapt. Tijdens het oplossen van problemen werd de laptop nooit in slaapstand gezet, maar alleen een normale opstart en uitschakeling. Ik denk dat het mogelijk is dat hun opstartimage de PM-instellingen van de laptop zou overschrijven, maar ze zijn nu terug naar mijn instellingen. Misschien is dit een vereiste modus bij het gebruik van een netwerkgeboot systeem.</p>
+            <p style="padding-left: 30px;">Mijn primaire schijf (OS, Applications, User folder), in de hoofdschijfsleuf, is een SSD. Er is nog genoeg ruimte over. Ik weet niet waarom hun boot image besloot om de secundaire HDD te gebruiken voor het sleepimage-bestand.</p>
+            <p>&nbsp;</p>
+            <p>Er zijn een paar dingen die het voor sommige gebruikers lastig kunnen maken.</p>
+            <p style="padding-left: 30px;">Omdat de map .com.apple.NetBootX met een punt begint, is deze verborgen in de Finder en kunt u deze niet zomaar naar de prullenbak slepen.</p>
+            <p style="padding-left: 30px;">De map en alle bestanden daarin zijn eigendom van de rootgebruiker en kunnen alleen door hem worden gelezen/beschreven.</p>
+            <p>Door deze items zullen de meeste gebruikers de directory nooit opmerken. Afhankelijk van hoe vol uw schijf is, merkt u misschien niet eens dat u de ruimte bent kwijtgeraakt. In mijn geval heb ik niet veel vrije ruimte meer over, dus een extra 16 GB zou snel genoeg worden opgemerkt. De grootte van het sleepimage-bestand is hetzelfde als hoeveel RAM u in uw machine hebt geïnstalleerd. Als u slechts 4 GB RAM hebt, maar een harde schijf van 1 TB, merkt u waarschijnlijk niet eens of maakt u zich geen zorgen over de verloren ruimte.</p>
+            <p>&nbsp;</p>
+            <p>Als u ooit bij de Apple Genius Bar bent geweest en ze hebben uw computer via het netwerk opgestart, dan wilt u misschien controleren of de map NetBootX bestaat.</p>
+            <ol>
+              <li>Open de Terminal-applicatie (die zich in de map /Applications/Utilities bevindt)</li>
+              <li>Krijg een volledige directorylijst van het hoogste niveau van uw harde schijf met de opdracht
+              <pre>ls-al /</pre>
+                <p>Als u een secundaire schijf hebt, controleer deze dan ook met</p>
+                <pre>ls -al /Volumes/[2e schijfnaam]/</pre>
+                <p>De uitvoer van de lijst ziet er ongeveer zo uit.</p>
+                <pre>$ ls -al /<font>
+drwxr-xr-x 33 rootwiel 1190 26 dec 13:20 ./<font>
+drwxr-xr-x 33 wortelwiel 1190 26 dec 13:20 ../<font>
+d--x--x--x 8 wortelwiel 272 25 aug 13:04 .DocumentRevisions-V100/<font>
+drwx------ 5 gebruikersmedewerkers 170 23 aug 16:05 .Spotlight-V100/<font>
+d-wx-wx-wt 3 gebruiker personeel 102 26 dec 16:25 .Trashes/<font>
+drwx------ 5 rootwiel 170 24 dec 11:24 .com.apple.NetBootX/<font>
+drwx------ 69 gebruiker personeel 2346 26 dec 12:37 .fseventsd/<font>
+drwxr-xr-x@ 2 rootwiel 68 20 juni 2012 .vol/<font>
+drwxrwxr-x+ 139 root admin 4726 25 dec 12:57 Toepassingen/<font>
+drwxr-xr-x+ 68 root wheel 2312 7 nov 22:36 Bibliotheek/<font>
+drwxr-xr-x+ 4 rootwiel 136 26 jul 01:48 Systeem/<font>
+drwxr-xr-x 7 root admin 238 Aug 20 14:54 Gebruikers/<font>
+drwxrwxrwt@ 6 root admin 204 26 dec 15:24 Volumes/<font>
+drwxr-xr-x@ 39 rootwiel 1326 19 sep 15:41 bin/<font>
+dr-xr-xr-x 3 rootwiel 4709 25 dec 10:52 dev/<font>
+lrwxr-xr-x@ 1 rootwiel 11 aug 23 19:39 etc@ -&gt; privé/enz.<font>
+-rw-r--r--@ 1 rootwiel 8192160 25 aug 01:49 mach_kernel<font>
+drwxr-xr-x@ 6 root wheel 204 26 jul 01:57 privé/<font>
+drwxr-xr-x@ 62 rootwiel 2108 19 sep 15:41 sbin/<font>
+lrwxr-xr-x@ 1 rootwiel 11 aug 23 19:39 tmp@ -&gt; privé/tmp<font>
+drwxr-xr-x@ 13 rootwiel 442 2 okt 22:01 usr/<font>
+lrwxr-xr-x@ 1 wortelwiel 11 aug 23 19:39 var@ -&gt; privé/var</pre>
+                <p>Als u nieuwsgierig bent naar de grootte van de bestanden, geef dan de map op met</p>
+                <pre>$ ls -al /.com.apple.NetBootX<font>
+drwxr-xr-x@ 5 rootwiel 170 24 dec 11:24 ./<font>
+drwxr-x--x 30 gebruiker personeel 1088 26 dec 13:10 ../<font>
+-rw-r--r--@ 1 root-staf 216169984 24 dec 11:31 shadowfile<font>
+-rw-r--r--@ 1 root-staf 17179869184 24 dec 11:24 sleepimage<font>
+-rw-r--r--@ 1 rootwiel 67108864 24 dec 11:24 swapfile0</pre>
+                <p>De grootte van de andere bestanden bedraagt ​​slechts een paar honderd megabytes, wat klein is vergeleken met de slaapafbeelding.</p></li>
+              <li>Als u de .com.apple.NetBootX directory hebt, kunt u deze verwijderen met de volgende opdracht.&nbsp;  <span style="color: #ff0000;">WAARSCHUWING: Als u “sudo rm” uitvoert met de verkeerde argumenten, kunnen al uw bestanden worden verwijderd. Wees heel voorzichtig met deze opdracht. Zorg ervoor dat er GEEN spatie staat tussen de / en .com….</span>
+                <pre>sudo /bin/rm -ri /.com.apple.NetBootX</pre>
+                <p>Als het op uw secundaire schijf staat, zal de opdracht zijn:</p>
+                <pre>sudo /bin/rm -ri /Volumes/[2e schijfnaam]/.com.apple.NetBootX</pre>
+              </li>
+            </ol>
+            <p>&nbsp;</p>
+            <p>U zou nu schoon moeten zijn van de bestanden van de Genius en de schijfruimte zal weer beschikbaar zijn. Als u uw systeem ooit weer meeneemt, vergeet dan niet om te controleren op de NetBootX-directory wanneer u het terugkrijgt.</p>
+          </div><!-- .entry-content -->
+
+          <div class="entry-utility">
+									<span class="cat-links">
+						<span class="entry-utility-prep entry-utility-prep-cat-links">Geplaatst in </span> <a href="/" rel="category">Tips, trucs en hacks</a>					</span>
+            <span class="meta-sep"> | </span>
+            <span class="comments-link"><span>Reacties uitgeschakeld</span></span>
+          </div><!-- .entry-utility -->
+        </div><!-- #post-## -->
+
+
+
+
+
+        <div id="post-39" class="post-39 post type-post status-publish format-standard hentry category-failures category-geek">
+          <h2 class="entry-title"><a href="/" rel="bookmark">Defecte SD-kaartlezer op de 15″ MacBook Pro uit eind 2011</a></h2>
+
+          <div class="entry-meta">
+            <span class="meta-prep meta-prep-author">Geplaatst op </span> <a href="/" title="22:42 uur" rel="bookmark"><span class="entry-date">24 december 2012</span></a> <span class="meta-sep"> door </span> <span class="author vcard"><a class="url fn n" href="/" title="Bekijk alle berichten van Jeff">Jeff</a></span>			</div><!-- .entry-meta -->
+
+          <div class="entry-content">
+            <p>Afgelopen weekend heb ik mijn <a href="http://www.raspberrypi.org/">Raspberry Pi</a> ontvangen . Voor de eerste test van de kleine man heb ik besloten OpenELEC te installeren om te zien hoe goed het zou werken als ons home theater control station (ik zal proberen hier later meer over te posten). De geweldige OpenELEC-jongens hebben het heel gemakkelijk gemaakt om te installeren. Je downloadt gewoon het imagebestand en schrijft het naar een SD-kaart, dus dat is wat mij in deze situatie bracht.</p>
+            <p>Voor het eerst in de laatste 1,5 jaar moest ik de SD-kaartlezer gebruiken in mijn [eind 2011 15″] MacBook Pro. Toen ik de kaart probeerde te mounten, kreeg ik problemen zoals geen reactie, zag de kaart maar mountte hem niet, mountte hem maar in alleen-lezenmodus en zelfs een repetitieve mount/unmount-sequentie compleet met de OS X-waarschuwing dat ik een schijf onjuist had verwijderd.</p>
+            <p>Ik dacht dat het de kaart was, dus ik probeerde een andere en kreeg dezelfde problemen. Een snelle zoekopdracht op internet leverde meerdere berichten op van andere gebruikers met hetzelfde probleem. Er waren meerdere suggesties over hoe dit probleem te omzeilen, maar geen daarvan werkte voor mij. Er is zelfs een <a href="http://www.youtube.com/watch?v=P6gO0FxNfH4">YouTube-video</a> die een truc liet zien waarbij de kaart er een klein beetje uit werd getrokken. Het werkte voor de meeste mensen en het werkte voor mij om de kaart te laten mounten. Hij zou echter alleen als alleen-lezen mounten. Wat ik ook deed, hij zou niet als lees-schrijf mounten.</p>
+            <p>Hoewel sommige gebruikers hetzelfde probleem meldden met de Early 2011 MacBook Pro, kon ik mijn oudere laptop met succes gebruiken. Ik schreef de OpenELEC-image naar de SD-kaart en kon beginnen met werken op mijn Raspberry Pi.</p>
+            <p>Ik heb plannen om het moederbord van de laptop later deze week te laten vervangen. Ik zal de resultaten posten.</p>
+          </div><!-- .entry-content -->
+
+          <div class="entry-utility">
+									<span class="cat-links">
+						<span class="entry-utility-prep entry-utility-prep-cat-links">Geplaatst in </span> <a href="/" rel="category">Mislukkingen</a> , <a href="/" rel="category">Geek</a>					</span>
+            <span class="meta-sep"> | </span>
+            <span class="comments-link"><span>Reacties uitgeschakeld</span></span>
+          </div><!-- .entry-utility -->
+        </div><!-- #post-## -->
+
+
+
+
+
+        <div id="post-12" class="post-12 post type-post status-publish format-standard hentry category-geek category-tips-tricks-hacks">
+          <h2 class="entry-title"><a href="/" rel="bookmark">BoekBoek Vol. 2 Upgrade</a></h2>
+
+          <div class="entry-meta">
+            <span class="meta-prep meta-prep-author">Geplaatst op </span> <a href="/" title="20:53 uur" rel="bookmark"><span class="entry-date">7 september 2012</span></a> <span class="meta-sep"> door </span> <span class="author vcard"><a class="url fn n" href="/" title="Bekijk alle berichten van Jeff">Jeff</a></span>			</div><!-- .entry-meta -->
+
+          <div class="entry-content">
+            <p>Afgelopen voorjaar kocht ik de nieuwe iPad 3. Ik heb nog een paar andere producten van <a href="http://twelvesouth.com" target="_blank">Twelve South,</a> waaronder de PlugBug en de Leather SurfacePad, dus toen ik een iPad-hoes nodig had, was het een makkelijke beslissing om de <a href="http://twelvesouth.com/products/bookbook_ipad/" target="_blank">BookBook</a> te kopen . Dit is een geweldige iPad-hoes. Ik heb er zoveel reacties op gekregen. Mensen hadden geen idee dat ik een iPad bij me had; "Ik dacht dat je een dagboek of zoiets bij je had".</p>
+            <p>Maar omdat die versie hetzelfde model is als toen de originele iPad uitkwam, had hij een paar gedateerde gebreken. Een van de grootste ergernissen is dat er geen magneet in de hoes zat om de iPad automatisch aan/uit te zetten. Na een paar minuten onderzoek, vallen en opstaan, had ik een kleine magneet op de binnenkant van de hoes geplaatst. Nu ging de iPad automatisch aan/uit. Het zag er niet mooi uit, gewoon vastgeplakt aan de hoes, maar het werkte.</p>
+            <p>Vervolgens was er een manier om de stylus vast te houden. Veel mensen (RIP, meneer Jobs) zeggen dat een stylus niet nodig is. Misschien, maar soms is het erg handig. Persoonlijk gebruik ik mijn iPad vaak voor creditcardtransacties en willekeurige mensen die niet bekend zijn met een iPad hebben moeite om hun naam te ondertekenen met hun vinger. Geef ze de stylus en ze hebben helemaal geen problemen. Ik gebruik de <a href="http://adonit.net/product/jot-flip/" target="_blank">Adonit Jot Flip</a> stylus, een geweldige stylus en een balpen. Ik raad ze ten zeerste aan. Omdat de BookBook niet is ontworpen om een ​​stylus vast te houden, rolde ik gewoon een visitekaartje op en plakte het vast aan de binnenkant van de scharnierruimte.</p>
+            <p>Dus onlangs kwam Twelve South met Vol. 2 van het BookBook. Dit is een herontwerp om 2 belangrijke problemen aan te pakken.</p>
+            <ol>
+              <li>De iPad zat niet stevig vast aan de bovenkant (alleen een simpel elastiekje) en hij kon eruit glijden als de hoes verkeerd werd vastgehouden. Dit is mij een paar keer overkomen, maar gelukkig kon ik hem opvangen voordat hij op de grond viel.</li>
+              <li>Om de kijkhoek aan te passen, zou je het bevestigde touwtje om de achterkant wikkelen. Ik denk dat sommige mensen dit niet prettig vonden omdat het touwtje vaak in de weg zat. Ik had dit probleem niet toen ik leerde het om de zijkant en om de bovenkant te wikkelen. Het was af en toe een klein probleem, maar ik vond het fijn omdat ik de kijkhoek kon instellen op wat ik nodig had voor de situatie. Als iemand die veel reist, was dit erg handig.</li>
+            </ol>
+            <p>Dus met dit nieuwe ontwerp werd probleem 1 opgelost door een omhulsel rondom de iPad te maken. Omdat dit betekende dat je de iPad niet gemakkelijk kon verwijderen, moest je hem kantelen/optillen zodat je de camera aan de achterkant kon gebruiken. Omdat de omhulling omhoog kon kantelen, werd hij gebruikt om het touwtje voor probleem 2 te vervangen en nu moet je hem tegen de rand van de bovenklep laten rusten. Sommige <a href="http://www.amazon.com/Twelve-South-12-1209-BookBook-Volume/product-reviews/B0084JFMFW/" target="_blank">recensenten op Amazon</a> hebben er al over geklaagd en ik moet het met ze eens zijn. Toen ik naast me op het bureau zat, was de opwaartse hoek te steil en de lagere hoek (gebruikt om te typen) was te laag. Dus hoewel de nieuwe hoes de iPad steviger vasthoudt, waren de andere problemen teleurstellend. In plaats van de nieuwe hoes terug te sturen en de oude te gebruiken, besloot ik hem gewoon opnieuw te hacken om aan mijn behoeften te voldoen. Deze keer nam ik wat meer tijd om het beter te doen.</p>
+            <div id="attachment_21" style="width: 159px" class="wp-caption alignleft"><a href="/blog/wp-content/uploads/2012/09/BookBook-MagnetClip.jpg"><img class=" wp-image-21 " title="BoekBoek-MagneetClip" src="/blog/wp-content/uploads/2012/09/BookBook-MagnetClip-249x300.jpg" alt="" width="149" height="180"></a><p class="wp-caption-text">Testen van de plaatsing van de magneet, bovenste label genaaid, paperclip voor onderste label zichtbaar</p></div>
+            <p>Allereerst moest ik de magneet op de cover aanpakken. Ja, ze hebben geen magneet op het nieuwe ontwerp gezet! Dat is gewoon een verbazingwekkende omissie, maar makkelijk genoeg om te repareren. Ik heb de magneet op dezelfde plek geplaatst, maar deze keer heb ik hem bedekt met zwarte isolatietape. Omdat de binnenkant van de cover zwart is, valt hij niet zo op als op de bruine van de eerste case.</p>
+            <p>Vervolgens moest ik een manier bedenken om me betere kijkhoeken te geven. Aan de binnenkant van de voorkant, aan de boven- en onderkant, zitten kleine stoffen labellipjes met open zijkanten die lussen vormen. Ik realiseerde me dat dit precies de positie was waar ik de behuizing wilde hebben. Ik probeerde eerst een zwart koord tussen de labels te leggen, maar toen het strak werd getrokken, kreukten de labels en zag het er niet goed uit. Ik probeerde verschillende manieren om de labels er goed uit te laten zien en kwam uiteindelijk op het idee van metalen beugels.</p>
+            <div id="attachment_17" style="width: 190px" class="wp-caption alignright"><a href="/blog/wp-content/uploads/2012/09/BookBook-Label.jpg"><img class=" wp-image-17" title="BoekBoek-Label" src="/blog/wp-content/uploads/2012/09/BookBook-Label-300x150.jpg" alt="" width="180" height="90"></a><p class="wp-caption-text">Labellabel genaaid met metalen beugel</p></div>
+            <p>Dit werden uiteindelijk paperclips die in een U-vorm waren gebogen, 1,5″ breed met .5″ pootjes. Ik schoof deze in de labels en naaide ze eenvoudig langs de voor- en bovenkanten om ze op hun plek te houden.</p>
+            <div id="attachment_20" style="width: 168px" class="wp-caption alignleft"><a href="/blog/wp-content/uploads/2012/09/BookBook-Strapped.jpg"><img class=" wp-image-20 " title="BoekBoek-Gesnoerd" src="/blog/wp-content/uploads/2012/09/BookBook-Strapped-263x300.jpg" alt="" width="158" height="150"></a><p class="wp-caption-text">Compleet met bandjes en magneet bedekt</p></div>
+            <p>Voor de kruisbandjes gebruikte ik een oude elastische bh-band die ik strak trok en dichtnaaide. Om de iPad op deze hoogte te positioneren, klapte ik gewoon de achterkant (toetsenbord) omhoog en schoof hem achter een van de bandjes. Dit heeft ook het voordeel van een licht-/privacyschild dat door de bovenste klep wordt gecreëerd. Perfect!</p>
+            <p>&nbsp;</p>
+            <div id="attachment_18" style="width: 172px" class="wp-caption alignright"><a href="/blog/wp-content/uploads/2012/09/BookBook-Lower.jpg"><img class=" wp-image-18 " title="BoekBoek-Lager" src="/blog/wp-content/uploads/2012/09/BookBook-Lower-270x300.jpg" alt="" width="162" height="180"></a><p class="wp-caption-text">Positie van de onderste band</p></div>
+            <p>Deze nieuwe behuizing is rondom iets kleiner, dus de ruimte langs de binnenkant van de rug voor de stylus was deze keer geen optie. De enige plek waar ik hem kon laten passen was langs de bovenkant van de achterkant van de interne behuizing. Ik heb alleen tijd gehad om dezelfde houder als voorheen te gebruiken, maar heb hem vastgehouden met de zwarte isolatietape. Ik hoop binnenkort een betere manier te vinden om hem op zijn plaats te houden, maar voor nu werkt hij.</p>
+            <div id="attachment_19" style="width: 190px" class="wp-caption alignleft"><a href="/blog/wp-content/uploads/2012/09/BookBook-Upper.jpg"><img class=" wp-image-19 " title="BoekBoek-Boven" src="/blog/wp-content/uploads/2012/09/BookBook-Upper-300x292.jpg" alt="" width="180" height="175"></a><p class="wp-caption-text">Positie bovenste band</p></div>
+            <p>Misschien helpen deze ideeën iemand anders die dezelfde problemen heeft ondervonden. Hopelijk komt Twelve South deze post tegen en verwerkt deze wijzigingen in Vol. 3. Als dat zo is, bedank me dan in de credits.</p>
+            <p>&nbsp;</p>
+          </div><!-- .entry-content -->
+
+          <div class="entry-utility">
+									<span class="cat-links">
+						<span class="entry-utility-prep entry-utility-prep-cat-links">Geplaatst in </span> <a href="/" rel="category">Geek</a> , <a href="/" rel="category">Tips, trucs en hacks</a>					</span>
+            <span class="meta-sep"> | </span>
+            <span class="comments-link"><span>Reacties uitgeschakeld</span></span>
+          </div><!-- .entry-utility -->
+        </div><!-- #post-## -->
+
+
+
+
+      </div><!-- #content -->
+    </div><!-- #container -->
+
+
+    <div id="primary" class="widget-area" role="complementary">
+      <ul class="xoxo">
+
+        <li id="text-2" class="widget-container widget_text"><h3 class="widget-title">Eclectische mijmeringen</h3>			<div class="textwidget">Deze blog bestaat uit mijn willekeurige gedachten, ideeën en ontdekkingen. Sommige zijn misschien interessant voor anderen, maar het is vooral een plek om wat info vast te houden, omdat mijn brein vol raakt en niet veel meer kan bevatten.</div>
+        </li><li id="search-2" class="widget-container widget_search"><form role="search" method="get" id="searchform" class="searchform" action="http://www.insomniacsoftware.com/">
+        <div>
+          <label class="screen-reader-text" for="s">Zoeken naar:</label>
+          <input type="text" value="" name="s" id="s">
+          <input type="submit" id="searchsubmit" value="Zoekopdracht">
+        </div>
+      </form></li>			</ul>
+    </div><!-- #primary .widget-area -->
+
+
+    <div id="secondary" class="widget-area" role="complementary">
+      <ul class="xoxo">
+        <li id="recent-posts-2" class="widget-container widget_recent_entries">		<h3 class="widget-title">recente berichten</h3>		<ul>
+          <li>
+            <a href="/">Hoe u kunt voorkomen dat het OS X VM-systeemlogboek wordt overspoeld met WindowServer-fouten</a>
+          </li>
+          <li>
+            <a href="/">Boeken en PDF's beheren in iTunes 12</a>
+          </li>
+          <li>
+            <a href="/">Maak het menu Open met… schoon</a>
+          </li>
+          <li>
+            <a href="/">Apple Genius steelt kostbare schijfruimte</a>
+          </li>
+          <li>
+            <a href="/">Defecte SD-kaartlezer op de 15″ MacBook Pro uit eind 2011</a>
+          </li>
+        </ul>
+        </li><li id="categories-2" class="widget-container widget_categories"><h3 class="widget-title">Categorieën</h3>		<ul>
+        <li class="cat-item cat-item-10"><a href="/">Mislukkingen</a>
+        </li>
+        <li class="cat-item cat-item-3"><a href="/">Nerd</a>
+        </li>
+        <li class="cat-item cat-item-4"><a href="/">Tips, trucs en hacks</a>
+        </li>
+        <li class="cat-item cat-item-1"><a href="/">Ongecategoriseerd</a>
+        </li>
+        <li class="cat-item cat-item-11"><a href="/">VMware</a>
+        </li>
+      </ul>
+      </li><li id="archives-2" class="widget-container widget_archive"><h3 class="widget-title">Archieven</h3>		<ul>
+        <li><a href="/">November 2014</a></li>
+        <li><a href="/">Oktober 2014</a></li>
+        <li><a href="/">februari 2013</a></li>
+        <li><a href="/">December 2012</a></li>
+        <li><a href="/">September 2012</a></li>
+      </ul>
+      </li><li id="meta-2" class="widget-container widget_meta"><h3 class="widget-title">Meta</h3>			<ul>
+        <li><a href="/"><abbr title="Really Simple Syndication">RSS-</abbr> berichten<abbr title="Echt eenvoudige syndicatie"></abbr></a></li>
+        <li><a href="/">Reacties <abbr title="Echt eenvoudige syndicatie">RSS</abbr></a></li>
+        <li><a href="https://wordpress.org/" title="Ondersteund door WordPress, het ultramoderne semantische persoonlijke publicatieplatform.">WordPress.org</a></li>			</ul>
+      </li>			</ul>
+    </div><!-- #secondary .widget-area -->
+
+  </div><!-- #main -->
+
+  <div id="footer" role="contentinfo">
+    <div id="colophon">
+
+
+
+      <div id="site-info">
+        Auteursrecht
+      <a href="/" title="Insomniac Software" rel="home">
+        Insomniac Software				</a>
+      </div><!-- #site-info -->
+
+    </div><!-- #colophon -->
+  </div><!-- #footer -->
+
+</div><!-- #wrapper --><div id="goog-gt-tt" class="VIpgJd-yAWNEb-L7lbkb skiptranslate" style="border-radius: 12px; margin: 0 0 0 -23px; padding: 0; font-family: 'Google Sans', Arial, sans-serif;" data-id=""><div id="goog-gt-vt" class="VIpgJd-yAWNEb-hvhgNd"><div class=" VIpgJd-yAWNEb-hvhgNd-l4eHX-i3jM8c"><img src="https://fonts.gstatic.com/s/i/productlogos/translate/v14/24px.svg" width="24" height="24" alt=""></div><div class=" VIpgJd-yAWNEb-hvhgNd-k77Iif-i3jM8c"><div class="VIpgJd-yAWNEb-hvhgNd-IuizWc" dir="ltr">Original text</div><div id="goog-gt-original-text" class="VIpgJd-yAWNEb-nVMfcd-fmcmS VIpgJd-yAWNEb-hvhgNd-axAV1"></div></div><div class="VIpgJd-yAWNEb-hvhgNd-N7Eqid ltr"><div class="VIpgJd-yAWNEb-hvhgNd-N7Eqid-B7I4Od ltr" dir="ltr"><div class="VIpgJd-yAWNEb-hvhgNd-UTujCb">Rate this translation</div><div class="VIpgJd-yAWNEb-hvhgNd-eO9mKe">Your feedback will be used to help improve Google Translate</div></div><div class="VIpgJd-yAWNEb-hvhgNd-xgov5 ltr"><button id="goog-gt-thumbUpButton" type="button" class="VIpgJd-yAWNEb-hvhgNd-bgm6sf" title="Good translation" aria-label="Good translation" aria-pressed="false"><span id="goog-gt-thumbUpIcon"><svg width="24" height="24" viewBox="0 0 24 24" focusable="false" class="VIpgJd-yAWNEb-hvhgNd-THI6Vb NMm5M"><path d="M21 7h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 0S7.08 6.85 7 7H2v13h16c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73V9c0-1.1-.9-2-2-2zM7 18H4V9h3v9zm14-7l-3 7H9V8l4.34-4.34L12 9h9v2z"></path></svg></span><span id="goog-gt-thumbUpIconFilled"><svg width="24" height="24" viewBox="0 0 24 24" focusable="false" class="VIpgJd-yAWNEb-hvhgNd-THI6Vb NMm5M"><path d="M21 7h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 0S7.08 6.85 7 7v13h11c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73V9c0-1.1-.9-2-2-2zM5 7H1v13h4V7z"></path></svg></span></button><button id="goog-gt-thumbDownButton" type="button" class="VIpgJd-yAWNEb-hvhgNd-bgm6sf" title="Poor translation" aria-label="Poor translation" aria-pressed="false"><span id="goog-gt-thumbDownIcon"><svg width="24" height="24" viewBox="0 0 24 24" focusable="false" class="VIpgJd-yAWNEb-hvhgNd-THI6Vb NMm5M"><path d="M3 17h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 24s7.09-6.85 7.17-7h5V4H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2zM17 6h3v9h-3V6zM3 13l3-7h9v10l-4.34 4.34L12 15H3v-2z"></path></svg></span><span id="goog-gt-thumbDownIconFilled"><svg width="24" height="24" viewBox="0 0 24 24" focusable="false" class="VIpgJd-yAWNEb-hvhgNd-THI6Vb NMm5M"><path d="M3 17h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 24s7.09-6.85 7.17-7V4H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2zm16 0h4V4h-4v13z"></path></svg></span></button></div></div><div id="goog-gt-votingHiddenPane" class="VIpgJd-yAWNEb-hvhgNd-aXYTce"><form id="goog-gt-votingForm" action="//translate.googleapis.com/translate_voting?client=te_lib" method="post" target="votingFrame" class="VIpgJd-yAWNEb-hvhgNd-aXYTce"><input type="text" name="sl" id="goog-gt-votingInputSrcLang"><input type="text" name="tl" id="goog-gt-votingInputTrgLang"><input type="text" name="query" id="goog-gt-votingInputSrcText"><input type="text" name="gtrans" id="goog-gt-votingInputTrgText"><input type="text" name="vote" id="goog-gt-votingInputVote"></form><iframe name="votingFrame" frameborder="0"></iframe></div></div></div>
+
+
+
+</body><style id="igor_ext_nofollow">a[rel~='nofollow'],a[rel~='sponsored'],a[rel~='ugc']{outline:.14em dotted red !important;outline-offset:.2em;}a[rel~='nofollow'] img,a[rel~='sponsored'] img,a[rel~='ugc'] img{outline:2px dotted red !important;outline-offset:.2em;}</style></html>
